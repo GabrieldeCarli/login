@@ -2,6 +2,7 @@ package PM.login.PM;
 
 import PM.login.model.User;
 import PM.login.DAO.UserDAO;
+import java.util.ArrayList;
 
 /**
  *
@@ -36,6 +37,15 @@ public class EfetuarLoginPM {
     public void clear() {
         login = "";
         password = "";
+    }
+    public void list_block(String nome){
+        String nomes[] = {"Gabriel", "Luiz", "Andre"};
+        
+        for(int i=0; i < 3; i++){
+            if(nome.equals(nomes[i])){
+                System.out.println("Usuario Bloqueado");
+            }
+        }  
     }
     
     public AdminMainPagePM pressLogin() throws Exception {
