@@ -7,11 +7,13 @@ package PM.login.model;
 public class User {
     private String username, password;
     private UserType type;
+    private int tentativas;
     
     public User(String username, String password, UserType type) {
         this.username = username;
         this.password = password;
         this.type = type;
+        this.tentativas = 3;
     }
 
     public void setPassword(String password) {
@@ -37,4 +39,16 @@ public class User {
     public UserType getType() {
         return type;
     }   
+    
+    public void erroSenha(){
+        tentativas--;
+    }
+
+    public int getTentativas() {
+        return tentativas;
+    }
+
+    public void setTentativas(int tentativas) {
+        this.tentativas = tentativas;
+    }
 }

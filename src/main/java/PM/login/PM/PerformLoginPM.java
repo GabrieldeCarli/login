@@ -50,10 +50,19 @@ public class PerformLoginPM {
         if(user == null)
             throw new Exception("Inexistent username");
         
-        if(! user.getPassword().equals(password))
+        if(! user.getPassword().equals(password)){ 
+            user.erroSenha();
+            System.out.println("tent"+user.getTentativas());
+            if (user.getTentativas() == 1){
+                blockUser(login);
+                throw new Exception("Blocked user");
+            }
             throw new Exception("Wrong password");
-        if(LoginHelper.verifyIfUserBlocked(user))
+        
+        }
+        if(list_block(login))
             throw new Exception("Blocked user");
+
         PagePM pagePM = null;
         if(user.getType() == UserType.ADMIN)
             pagePM = new AdminMainPagePM();
@@ -67,5 +76,20 @@ public class PerformLoginPM {
 
     void setUserDao(UserDAO userDao) {
         this.userDao = userDao;
+    }
+    String nomes[] = {"userBlocked"};
+
+    public boolean list_block(String nome){
+        for(int i=0; i < nomes.length; i++){
+            if(nome.equals(nomes[i])){
+                return true;
+            }
+        }  
+        
+        return false;
+    }
+    
+    public void blockUser(String nome){
+        nomes[nomes.length] = nome;
     }
 }

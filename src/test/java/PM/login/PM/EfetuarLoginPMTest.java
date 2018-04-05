@@ -115,24 +115,57 @@ public class EfetuarLoginPMTest {
         assertEquals("user", pagePM.getLoggedUser().getUsername());
     }
 
-    @Test
+    @Test(expected = Exception.class)
     public void usuario_bloqueado() throws Exception {
         UserDAO userDaoMock = mock(UserDAO.class);
-        when(userDaoMock.getByName("user"))
-                .thenReturn(new User("user", "normal", UserType.NORMALUSER));
+        when(userDaoMock.getByName("userBlocked"))
+                .thenReturn(new User("Blocked", "normal", UserType.NORMALUSER));
 
         PerformLoginPM efetuarLoginPM = new PerformLoginPM();
-        efetuarLoginPM.setLogin("user");
+        efetuarLoginPM.setLogin("userBlocked");
         efetuarLoginPM.setPassword("normal");
 
         efetuarLoginPM.setUserDao(userDaoMock);
 
         PagePM pagePM = efetuarLoginPM.pressLogin();
 
-        try {
+        efetuarLoginPM.pressLogin();
+    }
+    
+    @Test(expected = Exception.class)
+    public void usuarioErrarSenha3Vezes() throws Exception {
+        UserDAO userDaoMock = mock(UserDAO.class);
+        when(userDaoMock.getByName("userBlocked2"))
+                .thenReturn(new User("userBlocked2", "normal", UserType.NORMALUSER));
+
+        PerformLoginPM efetuarLoginPM = new PerformLoginPM();
+        efetuarLoginPM.setLogin("userBlocked");
+        efetuarLoginPM.setPassword("normal");
+
+        efetuarLoginPM.setUserDao(userDaoMock);
+
+        PagePM pagePM = efetuarLoginPM.pressLogin();
+
+        try{
             efetuarLoginPM.pressLogin();
-        } catch (Exception e) {
-            assertEquals("Blocked user", e.getMessage());
+        }
+        catch(Exception e){
+            System.err.println(e.getMessage());
+        }
+ 
+        try{
+            efetuarLoginPM.pressLogin();
+        }
+        catch(Exception e){
+            System.err.println(e.getMessage());
+        }
+        
+        try{
+            efetuarLoginPM.pressLogin();
+        }
+        catch(Exception e){
+            assertEquals("Wrong password", e.getMessage());
+            
         }
     }
 }
